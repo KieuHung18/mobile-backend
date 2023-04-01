@@ -1,4 +1,4 @@
-import { User, initModels } from "../models/index";
-export const create = async (user: User) => {
-  initModels().User.create(user);
+import { User } from "../models/user.model";
+export const create = async (user: any) => {
+  User.create(user);
 };
