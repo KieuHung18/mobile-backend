@@ -14,7 +14,10 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.json({ msg: "Hello world" }));
+import dotenv from "dotenv";
+dotenv.config();
+const test = process.env.TEST;
+app.get("/", (req, res) => res.json({ response: "Hello world", test: test }));
 app.get("/health", (req, res) => {
   res.send("OK");
 });

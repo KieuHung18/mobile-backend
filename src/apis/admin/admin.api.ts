@@ -5,7 +5,7 @@ import User from "./user.api";
 const Admin = express.Router();
 
 Admin.get("/", (req, res) => {
-  res.json({ msg: "Work in progess... nothing yet" });
+  res.json({ response: "Work in progess... nothing yet" });
 });
 Admin.use("/users", User);
 Admin.use("/upload-profile", UploadProfile);

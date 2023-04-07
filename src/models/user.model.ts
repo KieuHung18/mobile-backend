@@ -13,6 +13,7 @@ export interface UserProps {
   description: string | null;
   aboutMe: string | null;
   phone: number | null;
+  address: string | null;
   profileUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -41,6 +42,7 @@ export const User = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     hashPassword: {
       type: DataTypes.STRING,
@@ -53,7 +55,7 @@ export const User = sequelize.define(
       type: DataTypes.STRING(20),
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(800),
     },
     aboutMe: {
       type: DataTypes.STRING(45),
@@ -62,6 +64,9 @@ export const User = sequelize.define(
       type: DataTypes.INTEGER,
     },
     profileUrl: {
+      type: DataTypes.STRING,
+    },
+    address: {
       type: DataTypes.STRING,
     },
     createdAt: {

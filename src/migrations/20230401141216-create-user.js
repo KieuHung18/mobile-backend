@@ -28,6 +28,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: "email",
         allowNull: false,
+        unique: true,
       },
       hashPassword: {
         type: DataTypes.STRING,
@@ -43,7 +44,7 @@ module.exports = {
         field: "intro",
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(800),
         field: "description",
       },
       aboutMe: {
@@ -57,6 +58,10 @@ module.exports = {
       profileUrl: {
         type: DataTypes.STRING,
         field: "profileUrl",
+      },
+      address: {
+        type: DataTypes.STRING,
+        field: "address",
       },
       createdAt: {
         type: DataTypes.DATE,

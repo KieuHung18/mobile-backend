@@ -1,5 +1,8 @@
 import fs from "fs";
 import cloudinary = require("cloudinary");
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const cloudinaryV2 = cloudinary.v2;
 cloudinaryV2.config({
@@ -9,20 +12,25 @@ cloudinaryV2.config({
 });
 
 export const cloudUpload = async (files) => {
-  const error = [];
+  const errors = [];
+  const urls = [];
   for (const file of files) {
-    await cloudinaryV2.uploader
-      .upload(file.path, { public_id: file.originalname })
-      .then((data) => {
-        console.log("upload success", data);
-        fs.rm(file.path, (err) => {
-          console.error("delete file fail", err);
+    try {
+      await cloudinaryV2.uploader
+        .upload(file.path, { public_id: file.originalname })
+        .then((data) => {
+          urls.push(data.url);
         });
-      })
-      .catch((err) => {
-        error.push(err);
-        console.error("cloud upload", err);
+    } catch (error) {
+      errors.push(error);
+      console.error("cloud upload", error);
+    } finally {
+      fs.rm(file.path, (err) => {
+        if (err) {
+          console.error("delete file fail", err);
+        }
       });
+    }
   }
-  return error;
+  return [errors, urls];
 };
