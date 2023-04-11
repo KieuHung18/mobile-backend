@@ -15,9 +15,9 @@ module.exports = {
         field: "firstName",
         allowNull: false,
       },
-      midleName: {
+      middleName: {
         type: DataTypes.STRING(20),
-        field: "midleName",
+        field: "middleName",
       },
       lastName: {
         type: DataTypes.STRING(10),

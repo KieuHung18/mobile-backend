@@ -1,6 +1,7 @@
 import fs from "fs";
 import cloudinary = require("cloudinary");
 import dotenv from "dotenv";
+import TimeoutError from "../errors/timeout.error";
 
 dotenv.config();
 
@@ -12,7 +13,6 @@ cloudinaryV2.config({
 });
 
 export const cloudUpload = async (files) => {
-  const errors = [];
   const urls = [];
   for (const file of files) {
     try {
@@ -22,15 +22,17 @@ export const cloudUpload = async (files) => {
           urls.push(data.url);
         });
     } catch (error) {
-      errors.push(error);
-      console.error("cloud upload", error);
+      throw new TimeoutError(
+        "CloudinaryConnectionError",
+        "Cant connect to cloudinary"
+      );
     } finally {
       fs.rm(file.path, (err) => {
         if (err) {
-          console.error("delete file fail", err);
+          console.error("Delete file fail", err);
         }
       });
     }
   }
-  return [errors, urls];
+  return urls;
 };

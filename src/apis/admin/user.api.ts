@@ -1,28 +1,33 @@
 import express from "express";
 import { create, getUserById, update } from "../../services/user.service";
 const User = express.Router();
-User.post("/", async (req, res) => {
+User.post("/", async (req, res, next) => {
+  console.log(req.body);
   try {
     await create(req.body);
-    res.json({ response: "user added" });
+    res.json({ response: "User added" });
   } catch (error) {
-    res.status(400).json({ error: error });
+    next(error);
   }
 });
-User.post("/:id", (req, res) => {
-  // req.params.id
-  console.log(update(req.body.id, req.body.user));
-  res.json({ response: "Work in progess... nothing yet" });
+User.post("/:id", async (req, res, next) => {
+  try {
+    await update(parseInt(req.params.id), req.body);
+    res.json({ response: "Updated success" });
+  } catch (error) {
+    next(error);
+  }
 });
-User.get("/:id", async (req, res) => {
-  const user = await getUserById(parseInt(req.params.id));
-  if (user) {
+
+User.get("/:id", async (req, res, next) => {
+  try {
+    const user = await getUserById(parseInt(req.params.id));
     res.json({ response: user });
-  } else {
-    res.json({ error: "User not found" });
+  } catch (error) {
+    next(error);
   }
 });
-User.delete("/:id", (req, res) => {
+User.delete("/:id", async (req, res) => {
   // req.params.id
   res.json({ response: "Work in progess... nothing yet" });
 });

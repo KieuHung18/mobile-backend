@@ -1,39 +1,50 @@
-import { User } from "../models/user.model";
+import BadRequest from "../errors/bad-request.error";
+import ConflictError from "../errors/conflict.error";
+import NotFoundError from "../errors/not-found.error";
+import { User, UserProps } from "../models/user.model";
+
 export const create = async (user) => {
-  await User.create(user);
+  try {
+    await User.create(user);
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      throw new BadRequest(error.name, error.message);
+    }
+    if (error.name === "SequelizeUniqueConstraintError") {
+      throw new ConflictError("EmailConflict", "Email already exists");
+    }
+    throw error;
+  }
 };
+
 export const getUserById = async (id: number) => {
   const user = await User.findByPk(id);
-  if (user === null) {
-    console.log("Not found!");
-    return undefined;
-  } else {
+  if (user) {
     return user;
+  } else {
+    throw new NotFoundError("UserQueryError", "User not found");
   }
 };
 
 export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await User.findOne({
-      where: {
-        email: email,
-      },
-      attributes: {
-        exclude: ["hashPassword", "id", "createdAt", "updatedAt"],
-      },
-    });
+  const user = await User.findOne({
+    where: {
+      email: email,
+    },
+    attributes: {
+      exclude: ["hashPassword", "id", "createdAt", "updatedAt"],
+    },
+  });
+  if (user) {
     return user;
-  } catch (error) {
-    return undefined;
+  } else {
+    throw new NotFoundError("UserQueryError", "User not found");
   }
 };
 
-export const update = async (id, newUser) => {
-  const user = await User.findByPk(id);
-  if (user === null) {
-    return undefined;
-  } else {
-    Object.assign(user, newUser);
-    user.save();
-  }
+export const update = async (id: number, data: UserProps) => {
+  // eslint-disable-next-line no-useless-catch
+  const user = await getUserById(id);
+  Object.assign(user, data);
+  user.save();
 };

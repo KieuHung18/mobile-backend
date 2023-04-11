@@ -4,7 +4,7 @@ import sequelize from "../databases/postgres.database";
 export interface UserProps {
   id: number;
   firstName: string;
-  midleName: string | null;
+  middleName: string | null;
   lastName: string;
   email: string;
   hashPassword: string;
@@ -32,7 +32,7 @@ export const User = sequelize.define(
       type: DataTypes.STRING(10),
       allowNull: false,
     },
-    midleName: {
+    middleName: {
       type: DataTypes.STRING(20),
     },
     lastName: {
