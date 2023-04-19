@@ -1,7 +1,21 @@
-import { DataTypes } from "sequelize";
+import {
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
+  Model,
+} from "sequelize";
 import sequelize from "../databases/postgres.database";
+import { Artwork, ArtworkProps } from "./artwork.model";
 
-export interface UserProps {
+export interface UserProps extends Model {
   id: number;
   firstName: string;
   middleName: string | null;
@@ -17,15 +31,26 @@ export interface UserProps {
   profileUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
+
+  getArtworks: HasManyGetAssociationsMixin<ArtworkProps>;
+  addArtwork: HasManyAddAssociationMixin<ArtworkProps, number>;
+  addArtworks: HasManyAddAssociationsMixin<ArtworkProps, number>;
+  setArtworks: HasManySetAssociationsMixin<ArtworkProps, number>;
+  removeArtwork: HasManyRemoveAssociationMixin<ArtworkProps, number>;
+  removeArtworks: HasManyRemoveAssociationsMixin<ArtworkProps, number>;
+  hasArtwork: HasManyHasAssociationMixin<ArtworkProps, number>;
+  hasArtworks: HasManyHasAssociationsMixin<ArtworkProps, number>;
+  countArtworks: HasManyCountAssociationsMixin;
+  createArtwork: HasManyCreateAssociationMixin<ArtworkProps, "ownerId">;
 }
 
 export const User = sequelize.define(
   "User",
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
     firstName: {
@@ -80,3 +105,12 @@ export const User = sequelize.define(
     freezeTableName: true,
   }
 );
+
+User.hasMany(Artwork, {
+  as: "artworks",
+  foreignKey: "userId",
+});
+Artwork.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});

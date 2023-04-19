@@ -1,10 +1,13 @@
 import express from "express";
-import { create, getUserById, update } from "../../services/user.service";
+import UserService from "../../services/user.service";
+
 const User = express.Router();
+const userService = new UserService();
+
 User.post("/", async (req, res, next) => {
   console.log(req.body);
   try {
-    await create(req.body);
+    await userService.create(req.body);
     res.json({ response: "User added" });
   } catch (error) {
     next(error);
@@ -12,7 +15,7 @@ User.post("/", async (req, res, next) => {
 });
 User.post("/:id", async (req, res, next) => {
   try {
-    await update(parseInt(req.params.id), req.body);
+    await userService.update(req.params.id, req.body);
     res.json({ response: "Updated success" });
   } catch (error) {
     next(error);
@@ -21,7 +24,7 @@ User.post("/:id", async (req, res, next) => {
 
 User.get("/:id", async (req, res, next) => {
   try {
-    const user = await getUserById(parseInt(req.params.id));
+    const user = await userService.getUserById(req.params.id);
     res.json({ response: user });
   } catch (error) {
     next(error);
