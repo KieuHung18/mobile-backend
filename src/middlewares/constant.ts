@@ -1,0 +1,4 @@
+//10 minutes
+const EXPRESS_SESSION_MAX_AGE = 1000 * 60 * 10;
+
+export { EXPRESS_SESSION_MAX_AGE };

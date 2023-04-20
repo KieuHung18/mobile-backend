@@ -7,8 +7,15 @@ import NotFoundError from "./errors/not-found.error";
 
 const port = process.env.PORT || 3001;
 const app = express();
+const whitelist = [
+  "http://localhost:8000",
+  "http://localhost:3000",
+  "https://kieuhung18.github.io/info",
+  "https://kieuhung18.github.io/info-admin",
+];
 const corsOptions = {
-  origin: "*",
+  credentials: true,
+  origin: whitelist,
   optionsSuccessStatus: 200,
 };
 

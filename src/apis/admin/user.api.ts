@@ -5,7 +5,6 @@ const User = express.Router();
 const userService = new UserService();
 
 User.post("/", async (req, res, next) => {
-  console.log(req.body);
   try {
     await userService.create(req.body);
     res.json({ response: "User added" });

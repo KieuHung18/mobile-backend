@@ -52,7 +52,7 @@ module.exports = {
         field: "aboutMe",
       },
       phone: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         field: "phone",
       },
       profileUrl: {

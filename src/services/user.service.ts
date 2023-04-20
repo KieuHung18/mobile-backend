@@ -2,10 +2,21 @@ import BadRequest from "../errors/bad-request.error";
 import ConflictError from "../errors/conflict.error";
 import NotFoundError from "../errors/not-found.error";
 import { User, UserProps } from "../models/user.model";
+import bcrypt from "bcrypt";
+import { BYCRYPT_SALT_ROUNDS } from "./constant";
 
 class UserService {
+  private async hashPassword(password: string): Promise<string> {
+    const hashPassword = await bcrypt
+      .hash(password, BYCRYPT_SALT_ROUNDS)
+      .then(function (hash) {
+        return hash;
+      });
+    return hashPassword;
+  }
   public async create(user): Promise<UserProps> {
     try {
+      user.hashPassword = await this.hashPassword(user.hashPassword);
       return (await User.create(user)) as UserProps;
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
@@ -27,15 +38,15 @@ class UserService {
     }
   }
 
-  public async getUserByEmail(email: string) {
-    const user = await User.findOne({
+  public async getUserByEmail(email: string): Promise<UserProps> {
+    const user = (await User.findOne({
       where: {
         email: email,
       },
       attributes: {
         exclude: ["hashPassword", "id", "createdAt", "updatedAt"],
       },
-    });
+    })) as UserProps;
     if (user) {
       return user;
     } else {
@@ -44,7 +55,9 @@ class UserService {
   }
 
   public async update(id: string, data: UserProps) {
-    // eslint-disable-next-line no-useless-catch
+    if (data.hashPassword) {
+      data.hashPassword = await this.hashPassword(data.hashPassword);
+    }
     const user = await this.getUserById(id);
     Object.assign(user, data);
     user.save();

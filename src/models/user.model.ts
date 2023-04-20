@@ -16,7 +16,7 @@ import sequelize from "../databases/postgres.database";
 import { Artwork, ArtworkProps } from "./artwork.model";
 
 export interface UserProps extends Model {
-  id: number;
+  id: string;
   firstName: string;
   middleName: string | null;
   lastName: string;
@@ -26,7 +26,7 @@ export interface UserProps extends Model {
   intro: string | null;
   description: string | null;
   aboutMe: string | null;
-  phone: number | null;
+  phone: string | null;
   address: string | null;
   profileUrl: string | null;
   createdAt: Date;
@@ -86,7 +86,7 @@ export const User = sequelize.define(
       type: DataTypes.STRING(45),
     },
     phone: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     profileUrl: {
       type: DataTypes.STRING,
