@@ -20,7 +20,7 @@ const session = expressSession({
     httpOnly: false,
     sameSite: "none",
     maxAge: EXPRESS_SESSION_MAX_AGE,
-    domain: "https://kieuhung18.github.io",
+    domain: "kieuhung18.github.io",
   },
 });
 
