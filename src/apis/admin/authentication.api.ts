@@ -2,12 +2,13 @@ import express from "express";
 import AuthenService from "../../services/authen.service";
 import authUser from "../../middlewares/auth.middleware";
 import UserService from "../../services/user.service";
+import { SessionData } from "../../middlewares/session.middleware";
 
 const Authentication = express.Router();
 const authenService = new AuthenService();
 
 Authentication.post("/login", async (req, res, next) => {
-  const session = req.session as any;
+  const session: SessionData = req.session;
   const { email, password } = req.body;
   try {
     const user = await authenService.authen(email, password);
@@ -20,12 +21,12 @@ Authentication.post("/login", async (req, res, next) => {
 
 Authentication.use(authUser);
 Authentication.get("/", async (req, res, next) => {
-  const session = req.session as any;
+  const session: SessionData = req.session;
   res.json({ response: session.user });
 });
 
 Authentication.post("/", async (req, res, next) => {
-  const session = req.session as any;
+  const session: SessionData = req.session;
   const userService = new UserService();
   const user = await userService.getUserById(session.user.id);
   session.user = user;

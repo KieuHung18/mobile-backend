@@ -3,7 +3,12 @@ import sequelize from "../databases/postgres.database";
 import { User } from "./user.model";
 
 export interface ArtworkProps extends Model {
+  id: string;
   url: string;
+  publicId: string;
+  name: string;
+  feature: boolean;
+  publish: boolean;
 }
 
 export const Artwork = sequelize.define(
@@ -15,9 +20,22 @@ export const Artwork = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
+    publicId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     url: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    feature: {
+      type: DataTypes.BOOLEAN,
+    },
+    publish: {
+      type: DataTypes.BOOLEAN,
     },
     createdAt: {
       type: DataTypes.DATE,

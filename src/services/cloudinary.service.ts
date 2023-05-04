@@ -11,28 +11,49 @@ cloudinaryV2.config({
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 });
-
-export const cloudUpload = async (files) => {
-  const urls = [];
-  for (const file of files) {
-    try {
-      await cloudinaryV2.uploader
-        .upload(file.path, { public_id: file.originalname })
-        .then((data) => {
-          urls.push(data.url);
+interface CloudFile {
+  publicId: string;
+  name: string;
+  width: number;
+  height: number;
+  resource_type: string;
+  url: string;
+}
+class CloudinaryService {
+  public async uploads(files) {
+    const uploadedFiles: CloudFile[] = [];
+    for (const file of files) {
+      try {
+        await cloudinaryV2.uploader.upload(file.path, {}).then((data) => {
+          const uploadedFile: CloudFile = {
+            publicId: data.public_id,
+            name: file.originalname,
+            width: data.width,
+            height: data.height,
+            resource_type: data.resource_type,
+            url: data.url,
+          };
+          uploadedFiles.push(uploadedFile);
         });
-    } catch (error) {
-      throw new TimeoutError(
-        "CloudinaryConnectionError",
-        "Cant connect to cloudinary"
-      );
-    } finally {
-      fs.rm(file.path, (err) => {
-        if (err) {
-          console.error("Delete file fail", err);
-        }
-      });
+      } catch (error) {
+        throw new TimeoutError(
+          "CloudinaryConnectionError",
+          "Cant connect to cloudinary"
+        );
+      } finally {
+        fs.rm(file.path, (err) => {
+          if (err) {
+            console.error("Delete file fail", err);
+          }
+        });
+      }
     }
+    return uploadedFiles;
   }
-  return urls;
-};
+  public async delete(publicId: string) {
+    await cloudinaryV2.uploader.destroy(publicId, function (result) {
+      console.log(result);
+    });
+  }
+}
+export default CloudinaryService;

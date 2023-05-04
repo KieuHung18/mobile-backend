@@ -10,10 +10,27 @@ module.exports = {
         default: DataTypes.UUIDV4,
         allowNull: false,
       },
+      publicId: {
+        type: DataTypes.STRING,
+        field: "publicId",
+        allowNull: false,
+      },
       url: {
         type: DataTypes.STRING,
         field: "url",
         allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        field: "name",
+      },
+      feature: {
+        type: DataTypes.BOOLEAN,
+        field: "feature",
+      },
+      publish: {
+        type: DataTypes.BOOLEAN,
+        field: "publish",
       },
       createdAt: {
         type: DataTypes.DATE,
