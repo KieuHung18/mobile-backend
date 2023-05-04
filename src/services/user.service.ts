@@ -44,7 +44,7 @@ class UserService {
         email: email,
       },
       attributes: {
-        exclude: ["hashPassword", "id", "createdAt", "updatedAt"],
+        exclude: ["hashPassword", "createdAt", "updatedAt"],
       },
     })) as UserProps;
     if (user) {
