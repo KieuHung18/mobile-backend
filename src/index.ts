@@ -10,8 +10,7 @@ const app = express();
 const whitelist = [
   "http://localhost:8000",
   "http://localhost:3000",
-  "https://kieuhung18.github.io/info",
-  "https://kieuhung18.github.io/info-admin",
+  "https://kieuhung18.github.io",
 ];
 const corsOptions = {
   credentials: true,
