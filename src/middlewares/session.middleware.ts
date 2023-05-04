@@ -17,7 +17,7 @@ const session = expressSession({
   saveUninitialized: false,
   cookie: {
     secure: true,
-    httpOnly: false,
+    httpOnly: true,
     sameSite: "none",
     maxAge: EXPRESS_SESSION_MAX_AGE,
     domain: "kieuhung18.github.io",

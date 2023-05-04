@@ -18,6 +18,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
+app.enable("trust proxy");
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.get("/health", (req, res) => {
