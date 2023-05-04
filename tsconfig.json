@@ -2,6 +2,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "./dist",
-    "target": "ES5"
+    "target": "ES5",
+    "skipLibCheck": true
   }
 }
