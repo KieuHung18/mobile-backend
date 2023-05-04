@@ -16,8 +16,9 @@ const session = expressSession({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: true,
     httpOnly: false,
+    sameSite: "none",
     maxAge: EXPRESS_SESSION_MAX_AGE,
   },
 });
