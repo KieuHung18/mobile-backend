@@ -11,6 +11,7 @@ const whitelist = [
   "http://localhost:8000",
   "http://localhost:3000",
   "https://kieuhung18.github.io",
+  "https://b943-2405-4802-a438-1e40-c9b6-4834-29e0-4b6d.ngrok-free.app",
 ];
 const corsOptions = {
   credentials: true,

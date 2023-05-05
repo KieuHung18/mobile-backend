@@ -10,17 +10,27 @@ export interface SessionData extends Session {
   user?: UserProps;
 }
 
+export const getSession = async (req): Promise<SessionData> => {
+  let sessionData: SessionData;
+  await redisStore.get(req.headers.authentication, (err, session) => {
+    if (err) {
+      console.log(err);
+    }
+    sessionData = session;
+  });
+  return sessionData;
+};
+
 const session = expressSession({
   store: redisStore,
   secret: process.env.EXPRESS_SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,
-    httpOnly: true,
-    sameSite: "none",
     maxAge: EXPRESS_SESSION_MAX_AGE,
-    domain: "kieuhung18.github.io",
+    // sameSite: "none",
+    // httpOnly: true,
+    // secure: true,
   },
 });
 
