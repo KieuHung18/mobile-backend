@@ -1,13 +1,13 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
-import { User } from "./user.model";
 
 export interface ArtworkProps extends Model {
   id: string;
   url: string;
   publicId: string;
-  name: string;
-  feature: boolean;
+  like: number;
+  name?: string;
+  description?: string;
   publish: boolean;
 }
 
@@ -24,6 +24,9 @@ export const Artwork = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    like: {
+      type: DataTypes.INTEGER,
+    },
     url: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -31,8 +34,8 @@ export const Artwork = sequelize.define(
     name: {
       type: DataTypes.STRING,
     },
-    feature: {
-      type: DataTypes.BOOLEAN,
+    description: {
+      type: DataTypes.STRING,
     },
     publish: {
       type: DataTypes.BOOLEAN,

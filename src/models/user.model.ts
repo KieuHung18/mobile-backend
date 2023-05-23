@@ -18,16 +18,10 @@ import { Artwork, ArtworkProps } from "./artwork.model";
 export interface UserProps extends Model {
   id: string;
   firstName: string;
-  middleName: string | null;
   lastName: string;
+  role: string;
   email: string;
   hashPassword: string;
-  title: string | null;
-  intro: string | null;
-  description: string | null;
-  aboutMe: string | null;
-  phone: string | null;
-  address: string | null;
   profileUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -57,10 +51,11 @@ export const User = sequelize.define(
       type: DataTypes.STRING(10),
       allowNull: false,
     },
-    middleName: {
-      type: DataTypes.STRING(20),
-    },
     lastName: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
+    role: {
       type: DataTypes.STRING(10),
       allowNull: false,
     },
@@ -73,25 +68,7 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    title: {
-      type: DataTypes.STRING(45),
-    },
-    intro: {
-      type: DataTypes.STRING(20),
-    },
-    description: {
-      type: DataTypes.STRING(800),
-    },
-    aboutMe: {
-      type: DataTypes.STRING(45),
-    },
-    phone: {
-      type: DataTypes.STRING,
-    },
     profileUrl: {
-      type: DataTypes.STRING,
-    },
-    address: {
       type: DataTypes.STRING,
     },
     createdAt: {

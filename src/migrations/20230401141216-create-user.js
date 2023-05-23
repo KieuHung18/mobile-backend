@@ -15,13 +15,14 @@ module.exports = {
         field: "firstName",
         allowNull: false,
       },
-      middleName: {
-        type: DataTypes.STRING(20),
-        field: "middleName",
-      },
       lastName: {
         type: DataTypes.STRING(10),
         field: "lastName",
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.STRING(10),
+        field: "role",
         allowNull: false,
       },
       email: {
@@ -35,33 +36,9 @@ module.exports = {
         field: "hashPassword",
         allowNull: false,
       },
-      title: {
-        type: DataTypes.STRING(45),
-        field: "title",
-      },
-      intro: {
-        type: DataTypes.STRING(20),
-        field: "intro",
-      },
-      description: {
-        type: DataTypes.STRING(800),
-        field: "description",
-      },
-      aboutMe: {
-        type: DataTypes.STRING(45),
-        field: "aboutMe",
-      },
-      phone: {
-        type: DataTypes.STRING,
-        field: "phone",
-      },
       profileUrl: {
         type: DataTypes.STRING,
         field: "profileUrl",
-      },
-      address: {
-        type: DataTypes.STRING,
-        field: "address",
       },
       createdAt: {
         type: DataTypes.DATE,

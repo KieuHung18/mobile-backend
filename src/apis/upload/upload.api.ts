@@ -4,18 +4,18 @@ import bodyParser from "body-parser";
 import CloudinaryService from "../../services/cloudinary.service";
 
 const upload = multer({ dest: "uploads/" });
-const Uploads = express.Router();
+const Upload = express.Router();
 const cloudinaryService = new CloudinaryService();
-Uploads.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-Uploads.post("/", upload.array("files", 10), async (req, res, next) => {
+Upload.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+Upload.post("/", upload.single("file"), async (req, res, next) => {
   try {
-    const urls = await cloudinaryService.uploads(req.files);
-    res.json({ response: urls });
+    const uploadedFile = await cloudinaryService.upload(req.file);
+    res.json({ response: uploadedFile });
   } catch (error) {
     next(error);
   }
 });
-Uploads.delete("/:id", async (req, res, next) => {
+Upload.delete("/:id", async (req, res, next) => {
   try {
     await cloudinaryService.delete(req.params.id);
     res.json({ response: "File deleted" });
@@ -23,4 +23,4 @@ Uploads.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
-export default Uploads;
+export default Upload;

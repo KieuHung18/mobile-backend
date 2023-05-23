@@ -4,9 +4,9 @@ const logError = (err, req, res, next) => {
 };
 
 const returnError = (err, req, res, next) => {
-  res
-    .status(err.statusCode || 500)
-    .json({ error: { name: err.name, message: err.message } });
+  res.json({
+    error: { name: err.name, message: err.message, statusCode: err.statusCode },
+  });
 };
 
 export { logError, returnError };

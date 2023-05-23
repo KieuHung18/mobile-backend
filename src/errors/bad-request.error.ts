@@ -1,8 +1,8 @@
 import httpStatusCodes from "./httpStatusCode";
 import BaseError from "./base.error";
-class BadRequest extends BaseError {
+class BadRequestError extends BaseError {
   constructor(name: string, message: string) {
     super(name, message, httpStatusCodes.BAD_REQUEST);
   }
 }
-export default BadRequest;
+export default BadRequestError;

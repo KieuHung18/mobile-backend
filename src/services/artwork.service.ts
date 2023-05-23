@@ -2,8 +2,10 @@ import NotFoundError from "../errors/not-found.error";
 import { Artwork, ArtworkProps } from "../models/artwork.model";
 
 class ArtworkService {
-  public async create(artwork): Promise<ArtworkProps[]> {
-    return (await Artwork.bulkCreate(artwork)) as ArtworkProps[];
+  public async create(artwork): Promise<ArtworkProps> {
+    artwork.like = 0;
+    artwork.public = true;
+    return (await Artwork.create(artwork)) as ArtworkProps;
   }
 
   public async retrive(id: string): Promise<ArtworkProps> {

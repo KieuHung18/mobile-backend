@@ -20,35 +20,39 @@ interface CloudFile {
   url: string;
 }
 class CloudinaryService {
-  public async uploads(files) {
-    const uploadedFiles: CloudFile[] = [];
-    for (const file of files) {
-      try {
-        await cloudinaryV2.uploader.upload(file.path, {}).then((data) => {
-          const uploadedFile: CloudFile = {
-            publicId: data.public_id,
-            name: file.originalname,
-            width: data.width,
-            height: data.height,
-            resource_type: data.resource_type,
-            url: data.url,
-          };
-          uploadedFiles.push(uploadedFile);
-        });
-      } catch (error) {
-        throw new TimeoutError(
-          "CloudinaryConnectionError",
-          "Cant connect to cloudinary"
-        );
-      } finally {
-        fs.rm(file.path, (err) => {
-          if (err) {
-            console.error("Delete file fail", err);
-          }
-        });
-      }
+  public async upload(file) {
+    let uploadedFile: CloudFile = {
+      publicId: "",
+      name: "",
+      width: 0,
+      height: 0,
+      resource_type: "",
+      url: "",
+    };
+    try {
+      await cloudinaryV2.uploader.upload(file.path, {}).then((data) => {
+        uploadedFile = {
+          publicId: data.public_id,
+          name: file.originalname,
+          width: data.width,
+          height: data.height,
+          resource_type: data.resource_type,
+          url: data.url,
+        };
+      });
+    } catch (error) {
+      throw new TimeoutError(
+        "CloudinaryConnectionError",
+        "Cant connect to cloudinary"
+      );
+    } finally {
+      fs.rm(file.path, (err) => {
+        if (err) {
+          console.error("Delete file fail", err);
+        }
+      });
     }
-    return uploadedFiles;
+    return uploadedFile;
   }
   public async delete(publicId: string) {
     await cloudinaryV2.uploader.destroy(publicId, function (result) {

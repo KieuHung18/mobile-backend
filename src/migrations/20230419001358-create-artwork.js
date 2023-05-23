@@ -15,6 +15,10 @@ module.exports = {
         field: "publicId",
         allowNull: false,
       },
+      like: {
+        type: DataTypes.INTEGER,
+        field: "like",
+      },
       url: {
         type: DataTypes.STRING,
         field: "url",
@@ -24,9 +28,9 @@ module.exports = {
         type: DataTypes.STRING,
         field: "name",
       },
-      feature: {
-        type: DataTypes.BOOLEAN,
-        field: "feature",
+      description: {
+        type: DataTypes.STRING,
+        field: "description",
       },
       publish: {
         type: DataTypes.BOOLEAN,

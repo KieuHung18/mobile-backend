@@ -29,6 +29,7 @@ User.get("/:id", async (req, res, next) => {
     next(error);
   }
 });
+
 User.delete("/:id", async (req, res) => {
   // req.params.id
   res.json({ response: "Work in progess... nothing yet" });

@@ -9,5 +9,4 @@ const authUser = async (req, res, next) => {
     next(new UnauthorizedError("NotLogin", "User not login permission denied"));
   }
 };
-
 export default authUser;

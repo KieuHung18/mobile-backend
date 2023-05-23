@@ -6,17 +6,7 @@ import { SessionData, getSession } from "../../middlewares/session.middleware";
 const Artwork = express.Router();
 const artworkService = new ArtworkService();
 const userService = new UserService();
-Artwork.post("/", async (req, res, next) => {
-  const session: SessionData = await getSession(req);
-  try {
-    const artwork = await artworkService.create(req.body);
-    const user = await userService.getUserById(session.user.id);
-    user.addArtworks(artwork);
-    res.json({ response: "Artwork added" });
-  } catch (error) {
-    next(error);
-  }
-});
+
 Artwork.post("/:id", async (req, res, next) => {
   try {
     const artwork = await artworkService.update(req.params.id, req.body);

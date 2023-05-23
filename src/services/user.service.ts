@@ -4,6 +4,8 @@ import NotFoundError from "../errors/not-found.error";
 import { User, UserProps } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { BYCRYPT_SALT_ROUNDS } from "./constant";
+import BadRequestError from "../errors/bad-request.error";
+import { log } from "console";
 
 class UserService {
   private async hashPassword(password: string): Promise<string> {
@@ -14,9 +16,21 @@ class UserService {
       });
     return hashPassword;
   }
-  public async create(user): Promise<UserProps> {
+  public async create(user, isAdmin?: boolean): Promise<UserProps> {
+    console.log(user);
+    if (!user.password || !user.email || !user.firstName || !user.lastName) {
+      throw new BadRequestError(
+        "MissingRequiredField",
+        "Required filed not fill"
+      );
+    }
+    if (isAdmin) {
+      user.role = "admin";
+    } else {
+      user.role = "user";
+    }
     try {
-      user.hashPassword = await this.hashPassword(user.hashPassword);
+      user.hashPassword = await this.hashPassword(user.password);
       return (await User.create(user)) as UserProps;
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
