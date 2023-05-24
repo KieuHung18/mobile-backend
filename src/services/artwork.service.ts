@@ -4,7 +4,7 @@ import { Artwork, ArtworkProps } from "../models/artwork.model";
 class ArtworkService {
   public async create(artwork): Promise<ArtworkProps> {
     artwork.like = 0;
-    artwork.public = true;
+    artwork.publish = true;
     return (await Artwork.create(artwork)) as ArtworkProps;
   }
 

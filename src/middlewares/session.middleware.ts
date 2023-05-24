@@ -24,8 +24,8 @@ export const getSession = async (req): Promise<SessionData> => {
 const session = expressSession({
   store: redisStore,
   secret: process.env.EXPRESS_SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     maxAge: EXPRESS_SESSION_MAX_AGE,
     // sameSite: "none",
