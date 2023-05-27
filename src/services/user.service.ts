@@ -5,7 +5,6 @@ import { User, UserProps } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { BYCRYPT_SALT_ROUNDS } from "./constant";
 import BadRequestError from "../errors/bad-request.error";
-import { log } from "console";
 
 class UserService {
   private async hashPassword(password: string): Promise<string> {
@@ -17,7 +16,6 @@ class UserService {
     return hashPassword;
   }
   public async create(user, isAdmin?: boolean): Promise<UserProps> {
-    console.log(user);
     if (!user.password || !user.email || !user.firstName || !user.lastName) {
       throw new BadRequestError(
         "MissingRequiredField",

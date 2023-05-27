@@ -1,8 +1,7 @@
 const DataTypes = require("sequelize").DataTypes;
-
 module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.createTable("Artwork", {
+  async up(queryInterface) {
+    await queryInterface.createTable("Ideal", {
       id: {
         type: DataTypes.UUID,
         field: "id",
@@ -10,18 +9,9 @@ module.exports = {
         default: DataTypes.UUIDV4,
         allowNull: false,
       },
-      publicId: {
-        type: DataTypes.STRING,
-        field: "publicId",
-        allowNull: false,
-      },
-      url: {
-        type: DataTypes.STRING,
-        field: "url",
-        allowNull: false,
-      },
       name: {
         type: DataTypes.STRING,
+        allowNull: false,
         field: "name",
       },
       description: {
@@ -50,7 +40,8 @@ module.exports = {
       },
     });
   },
-  down: async (queryInterface) => {
+
+  async down(queryInterface) {
     await queryInterface.dropTable("Artwork");
   },
 };

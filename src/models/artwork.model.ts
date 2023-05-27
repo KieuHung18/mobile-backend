@@ -5,7 +5,6 @@ export interface ArtworkProps extends Model {
   id: string;
   url: string;
   publicId: string;
-  like: number;
   name?: string;
   description?: string;
   publish: boolean;
@@ -23,9 +22,6 @@ export const Artwork = sequelize.define(
     publicId: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    like: {
-      type: DataTypes.INTEGER,
     },
     url: {
       type: DataTypes.STRING,
@@ -46,8 +42,9 @@ export const Artwork = sequelize.define(
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
-  {
-    freezeTableName: true,
-  }
+  { paranoid: true, freezeTableName: true }
 );

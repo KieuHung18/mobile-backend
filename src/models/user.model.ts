@@ -1,19 +1,7 @@
-import {
-  DataTypes,
-  HasManyAddAssociationMixin,
-  HasManyAddAssociationsMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  HasManyRemoveAssociationMixin,
-  HasManyRemoveAssociationsMixin,
-  HasManySetAssociationsMixin,
-  Model,
-} from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
 import { Artwork, ArtworkProps } from "./artwork.model";
+import { Ideal, IdealProps } from "./ideal.model";
 
 export interface UserProps extends Model {
   id: string;
@@ -22,20 +10,19 @@ export interface UserProps extends Model {
   role: string;
   email: string;
   hashPassword: string;
-  profileUrl: string | null;
+  profileUrl?: string;
+  publicId?: string;
   createdAt: Date;
   updatedAt: Date;
 
-  getArtworks: HasManyGetAssociationsMixin<ArtworkProps>;
-  addArtwork: HasManyAddAssociationMixin<ArtworkProps, number>;
-  addArtworks: HasManyAddAssociationsMixin<ArtworkProps, number>;
-  setArtworks: HasManySetAssociationsMixin<ArtworkProps, number>;
-  removeArtwork: HasManyRemoveAssociationMixin<ArtworkProps, number>;
-  removeArtworks: HasManyRemoveAssociationsMixin<ArtworkProps, number>;
-  hasArtwork: HasManyHasAssociationMixin<ArtworkProps, number>;
-  hasArtworks: HasManyHasAssociationsMixin<ArtworkProps, number>;
-  countArtworks: HasManyCountAssociationsMixin;
-  createArtwork: HasManyCreateAssociationMixin<ArtworkProps, "ownerId">;
+  getArtworks;
+  hasArtwork;
+  countArtworks;
+  createArtwork;
+
+  getIdeals;
+  hasIdeal;
+  createIdeal;
 }
 
 export const User = sequelize.define(
@@ -71,14 +58,21 @@ export const User = sequelize.define(
     profileUrl: {
       type: DataTypes.STRING,
     },
+    publicId: {
+      type: DataTypes.STRING,
+    },
     createdAt: {
       type: DataTypes.DATE,
     },
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
+    paranoid: true,
     freezeTableName: true,
   }
 );
@@ -88,6 +82,14 @@ User.hasMany(Artwork, {
   foreignKey: "userId",
 });
 Artwork.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+User.hasMany(Ideal, {
+  as: "ideals",
+  foreignKey: "userId",
+});
+Ideal.belongsTo(User, {
   as: "user",
   foreignKey: "userId",
 });

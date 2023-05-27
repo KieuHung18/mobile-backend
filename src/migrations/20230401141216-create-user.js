@@ -40,6 +40,10 @@ module.exports = {
         type: DataTypes.STRING,
         field: "profileUrl",
       },
+      publicId: {
+        type: DataTypes.STRING,
+        field: "publicId",
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: "createdAt",
@@ -47,6 +51,10 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         field: "updatedAt",
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        field: "deletedAt",
       },
     });
   },

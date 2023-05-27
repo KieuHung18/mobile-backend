@@ -34,18 +34,12 @@ Authentication.post("/register", async (req, res, next) => {
 
 Authentication.use(authUser);
 Authentication.get("/", async (req, res, next) => {
-  const session: SessionData = await getSession(req);
-  console.log("get", session.user);
-  res.json({ response: session.user });
-});
-
-Authentication.post("/", async (req, res, next) => {
   const session: SessionData = req.session;
   try {
     const userService = new UserService();
     const user = await userService.getUserById((await getSession(req)).user.id);
     session.user = user;
-    res.json({ response: session.id });
+    res.json({ response: { sessionId: session.id, user: user } });
   } catch (error) {
     next(error);
   }

@@ -10,6 +10,7 @@ class ArtworkService {
 
   public async retrive(id: string): Promise<ArtworkProps> {
     const artwork = await Artwork.findByPk(id);
+
     if (artwork) {
       return artwork as ArtworkProps;
     } else {
@@ -28,6 +29,13 @@ class ArtworkService {
   }
   public async list(): Promise<ArtworkProps[]> {
     return (await Artwork.findAll()) as ArtworkProps[];
+  }
+  public async publishList(): Promise<ArtworkProps[]> {
+    return (await Artwork.findAll({
+      where: {
+        publish: true,
+      },
+    })) as ArtworkProps[];
   }
 }
 export default ArtworkService;

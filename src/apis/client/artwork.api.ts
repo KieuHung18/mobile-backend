@@ -2,22 +2,33 @@ import express from "express";
 import ArtworkService from "../../services/artwork.service";
 import UserService from "../../services/user.service";
 import { SessionData, getSession } from "../../middlewares/session.middleware";
+import ForbiddenError from "../../errors/forbidden.error";
 
 const Artwork = express.Router();
 const artworkService = new ArtworkService();
 const userService = new UserService();
+
+const artWorkPermission = async (req, res, next) => {
+  const session: SessionData = await getSession(req);
+  const user = await userService.getUserById(session.user.id);
+  const artwork = await artworkService.retrive(req.params.id);
+  if (user.hasArtwork(artwork)) {
+    next();
+  } else {
+    next(new ForbiddenError("Fobidden", "Invalid User, action not allow"));
+  }
+};
 Artwork.post("/", async (req, res, next) => {
   const session: SessionData = await getSession(req);
   try {
-    const artwork = await artworkService.create(req.body);
     const user = await userService.getUserById(session.user.id);
-    user.addArtwork(artwork);
-    res.json({ response: "Artwork added" });
+    const artwork = await user.createArtwork(req.body);
+    res.json({ response: artwork });
   } catch (error) {
     next(error);
   }
 });
-Artwork.post("/:id", async (req, res, next) => {
+Artwork.post("/:id", artWorkPermission, async (req, res, next) => {
   try {
     const artwork = await artworkService.update(req.params.id, req.body);
     res.json({ response: artwork });
@@ -37,10 +48,18 @@ Artwork.get("/", async (req, res, next) => {
   }
 });
 
-Artwork.delete("/:id", async (req, res, next) => {
+Artwork.delete("/:id", artWorkPermission, async (req, res, next) => {
   try {
-    artworkService.delete(req.params.id);
-    res.json({ response: "Artwork deleted" });
+    const session: SessionData = await getSession(req);
+    const user = await userService.getUserById(session.user.id);
+    const artwork = await artworkService.retrive(req.params.id);
+
+    if (user.hasArtwork(artwork)) {
+      await artworkService.delete(req.params.id);
+      res.json({ response: artwork });
+    } else {
+      throw new ForbiddenError("Fobidden", "Invalid User, action not allow");
+    }
   } catch (error) {
     next(error);
   }
