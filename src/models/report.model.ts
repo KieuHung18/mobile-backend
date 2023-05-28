@@ -1,22 +1,21 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
-import { Artwork, ArtworkProps } from "./artwork.model";
+import { Artwork } from "./artwork.model";
 
-export interface IdealProps extends Model {
+export interface ReportProps extends Model {
   id: string;
   name: string;
   description?: string;
-  publish: boolean;
+  solved: boolean;
+  userId: string;
+  artworkId: string;
 
-  getArtworks;
-  addArtwork;
-  removeArtwork;
-  hasArtwork;
-  countArtworks;
+  getArtwork;
+  setArtwork;
 }
 
-export const Ideal = sequelize.define(
-  "Ideal",
+export const Report = sequelize.define(
+  "Report",
   {
     id: {
       type: DataTypes.UUID,
@@ -31,7 +30,7 @@ export const Ideal = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
-    publish: {
+    solved: {
       type: DataTypes.BOOLEAN,
     },
     createdAt: {
@@ -49,15 +48,11 @@ export const Ideal = sequelize.define(
     freezeTableName: true,
   }
 );
-Artwork.belongsToMany(Ideal, {
-  as: "ideals",
+Report.belongsTo(Artwork, {
+  as: "artwork",
   foreignKey: "artworkId",
-  otherKey: "idealId",
-  through: "ArtworkIdeal",
 });
-Ideal.belongsToMany(Artwork, {
-  as: "artworks",
-  foreignKey: "idealId",
-  otherKey: "artworkId",
-  through: "ArtworkIdeal",
+Artwork.hasOne(Report, {
+  as: "report",
+  foreignKey: "artworkId",
 });

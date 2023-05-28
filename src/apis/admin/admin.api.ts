@@ -1,15 +1,15 @@
 import express from "express";
 import User from "./user.api";
 import Artwork from "./artwork.api";
-import authUser from "../../middlewares/auth.middleware";
+import Report from "./report.api";
 
 const Admin = express.Router();
 
-Admin.use(authUser);
 Admin.get("/", (req, res) => {
   res.json({ response: "Wellcome to admin" });
 });
 Admin.use("/users", User);
 Admin.use("/artworks", Artwork);
+Admin.use("/reports", Report);
 
 export default Admin;

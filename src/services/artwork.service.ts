@@ -35,6 +35,7 @@ class ArtworkService {
       where: {
         publish: true,
       },
+      order: [["createdAt", "DESC"]],
     })) as ArtworkProps[];
   }
 }

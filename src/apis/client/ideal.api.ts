@@ -62,6 +62,7 @@ Ideal.delete("/:id", idealPermission, async (req, res, next) => {
     next(error);
   }
 });
+
 Ideal.get("/artworks/:id", idealPermission, async (req, res, next) => {
   try {
     const ideal = await idealService.retrive(req.params.id);

@@ -1,7 +1,9 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
-import { Artwork, ArtworkProps } from "./artwork.model";
-import { Ideal, IdealProps } from "./ideal.model";
+import { Artwork } from "./artwork.model";
+import { Ideal } from "./ideal.model";
+import { Report } from "./report.model";
+import { Notification } from "./notification";
 
 export interface UserProps extends Model {
   id: string;
@@ -23,6 +25,8 @@ export interface UserProps extends Model {
   getIdeals;
   hasIdeal;
   createIdeal;
+
+  createReport;
 }
 
 export const User = sequelize.define(
@@ -90,6 +94,22 @@ User.hasMany(Ideal, {
   foreignKey: "userId",
 });
 Ideal.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+User.hasMany(Report, {
+  as: "reports",
+  foreignKey: "userId",
+});
+Report.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+User.hasMany(Notification, {
+  as: "notifications",
+  foreignKey: "userId",
+});
+Notification.belongsTo(User, {
   as: "user",
   foreignKey: "userId",
 });

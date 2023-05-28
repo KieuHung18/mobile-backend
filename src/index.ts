@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.get("/health", (req, res) => {
   res.send("OK");
 });
-app.get("/get", (req, res) => {
+app.get("/", (req, res) => {
   res.json({ response: "OK" });
 });
 

@@ -3,6 +3,7 @@ import ArtworkService from "../../services/artwork.service";
 import UserService from "../../services/user.service";
 import { SessionData, getSession } from "../../middlewares/session.middleware";
 import ForbiddenError from "../../errors/forbidden.error";
+import CloudinaryService from "../../services/cloudinary.service";
 
 const Artwork = express.Router();
 const artworkService = new ArtworkService();
@@ -41,7 +42,7 @@ Artwork.get("/", async (req, res, next) => {
   try {
     const session: SessionData = await getSession(req);
     const user = await userService.getUserById(session.user.id);
-    const artworks = await user.getArtworks();
+    const artworks = await user.getArtworks({ order: [["createdAt", "DESC"]] });
     res.json({ response: artworks });
   } catch (error) {
     next(error);
@@ -53,9 +54,12 @@ Artwork.delete("/:id", artWorkPermission, async (req, res, next) => {
     const session: SessionData = await getSession(req);
     const user = await userService.getUserById(session.user.id);
     const artwork = await artworkService.retrive(req.params.id);
-
     if (user.hasArtwork(artwork)) {
-      await artworkService.delete(req.params.id);
+      const artwork = await artworkService.delete(req.params.id);
+      if (artwork) {
+        const cloudinaryService = new CloudinaryService();
+        cloudinaryService.delete(artwork.publicId);
+      }
       res.json({ response: artwork });
     } else {
       throw new ForbiddenError("Fobidden", "Invalid User, action not allow");

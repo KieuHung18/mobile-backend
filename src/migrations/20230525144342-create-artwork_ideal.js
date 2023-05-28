@@ -4,12 +4,15 @@ module.exports = {
     await queryInterface.createTable("ArtworkIdeal", {
       artworkId: {
         type: DataTypes.UUID,
-        field: "artworkId",
         primaryKey: true,
+        field: "artworkId",
+        allowNull: false,
       },
       idealId: {
         type: DataTypes.UUID,
+        primaryKey: true,
         field: "idealId",
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
