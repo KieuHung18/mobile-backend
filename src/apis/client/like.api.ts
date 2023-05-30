@@ -20,7 +20,7 @@ Like.post("/", async (req, res, next) => {
     } else {
       await likeService.delete(user.id, req.body.artworkId);
     }
-    res.json({ response: { like: "like" } });
+    res.json({ response: !liked });
   } catch (error) {
     next(error);
   }

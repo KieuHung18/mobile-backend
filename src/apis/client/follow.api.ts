@@ -20,7 +20,7 @@ Follow.post("/", async (req, res, next) => {
     } else {
       await followService.delete(user.id, req.body.followingId);
     }
-    res.json({ response: followed });
+    res.json({ response: !followed });
   } catch (error) {
     next(error);
   }
