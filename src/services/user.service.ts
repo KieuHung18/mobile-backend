@@ -10,7 +10,7 @@ import { FollowingProps } from "../models/following.model";
 import { LikeProps } from "../models/like.model";
 
 class UserService {
-  private async hashPassword(password: string): Promise<string> {
+  public async hashPassword(password: string): Promise<string> {
     const hashPassword = await bcrypt
       .hash(password, BYCRYPT_SALT_ROUNDS)
       .then(function (hash) {

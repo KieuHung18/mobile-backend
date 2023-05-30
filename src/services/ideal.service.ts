@@ -51,7 +51,8 @@ class IdealService {
       if (artworks[0]) {
         ideal.dataValues.thumbnail = artworks[0].dataValues.url;
       } else {
-        ideal.dataValues.thumbnail = "";
+        ideal.dataValues.thumbnail =
+          "https://res.cloudinary.com/dlljuyhvh/image/upload/v1685448207/aafb06eb839e4124bb84a74734da28d1_z4p9fg.png";
       }
     }
     return ideals;

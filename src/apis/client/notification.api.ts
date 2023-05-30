@@ -9,7 +9,9 @@ Notification.get("/", async (req, res, next) => {
   const session: SessionData = await getSession(req);
   try {
     const user = await userService.getUserById(session.user.id);
-    const notifications = await user.getNotifications();
+    const notifications = await user.getNotifications({
+      order: [["createdAt", "DESC"]],
+    });
     res.json({ response: notifications });
   } catch (error) {
     next(error);

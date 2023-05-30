@@ -7,6 +7,7 @@ import { UserProps } from "../../models/user.model";
 
 const Authentication = express.Router();
 const authenService = new AuthenService();
+const userService = new UserService();
 
 Authentication.post("/login", async (req, res, next) => {
   const session: SessionData = req.session;
@@ -21,7 +22,6 @@ Authentication.post("/login", async (req, res, next) => {
 });
 
 Authentication.post("/register", async (req, res, next) => {
-  const userService = new UserService();
   try {
     const user: UserProps = await userService.create(req.body);
     const session: SessionData = req.session;
@@ -36,13 +36,38 @@ Authentication.use(authUser);
 Authentication.post("/", async (req, res, next) => {
   const session: SessionData = req.session;
   try {
-    const userService = new UserService();
     const user = await userService.getUserById((await getSession(req)).user.id);
     session.user = user;
     res.json({ response: session.id });
   } catch (error) {
     next(error);
   }
+});
+Authentication.post("/resetPassword", async (req, res, next) => {
+  const session: SessionData = await getSession(req);
+  try {
+    const user = await userService.getUserById(session.user.id);
+    await authenService.authen(user.email, req.body.password);
+    const newPassword = await userService.hashPassword(req.body.newPassword);
+    user.hashPassword = newPassword;
+    user.save();
+    res.json({ response: "Success" });
+  } catch (error) {
+    next(error);
+  }
+  // let session: SessionData = await getSession(req);
+  // try {
+  //   const user = await userService.getUserById(session.user.id);
+  //   const authUser = await authenService.authen(user.email, req.body.password);
+  //   const newPassword = await userService.hashPassword(req.body.newPassword);
+  //   user.hashPassword = newPassword;
+  //   user.save();
+  //   session = req.session;
+  //   session.user = authUser;
+  //   res.json({ response: req.session.id });
+  // } catch (error) {
+  //   next(error);
+  // }
 });
 Authentication.get("/", async (req, res, next) => {
   const session: SessionData = await getSession(req);
