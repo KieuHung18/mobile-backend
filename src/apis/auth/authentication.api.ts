@@ -4,11 +4,32 @@ import authUser from "../../middlewares/auth.middleware";
 import UserService from "../../services/user.service";
 import { SessionData, getSession } from "../../middlewares/session.middleware";
 import { UserProps } from "../../models/user.model";
+import ForbiddenError from "../../errors/forbidden.error";
 
 const Authentication = express.Router();
 const authenService = new AuthenService();
 const userService = new UserService();
 
+Authentication.post("/admin/login/", async (req, res, next) => {
+  const session: SessionData = req.session;
+  const { email, password } = req.body;
+  try {
+    const user = await authenService.authen(email, password);
+    console.log(user.role);
+
+    if (user.role === "user") {
+      throw new ForbiddenError(
+        "PermissionDenied",
+        "User role permission denied"
+      );
+    } else {
+      session.user = user;
+      res.json({ response: session.id });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 Authentication.post("/login", async (req, res, next) => {
   const session: SessionData = req.session;
   const { email, password } = req.body;
@@ -55,19 +76,6 @@ Authentication.post("/resetPassword", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // let session: SessionData = await getSession(req);
-  // try {
-  //   const user = await userService.getUserById(session.user.id);
-  //   const authUser = await authenService.authen(user.email, req.body.password);
-  //   const newPassword = await userService.hashPassword(req.body.newPassword);
-  //   user.hashPassword = newPassword;
-  //   user.save();
-  //   session = req.session;
-  //   session.user = authUser;
-  //   res.json({ response: req.session.id });
-  // } catch (error) {
-  //   next(error);
-  // }
 });
 Authentication.get("/", async (req, res, next) => {
   const session: SessionData = await getSession(req);
