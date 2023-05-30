@@ -16,6 +16,14 @@ class ReportService {
       throw new NotFoundError("ReportQueryError", "Report not found");
     }
   }
+  public async deleteAllByArtworkId(artworkId: string): Promise<number> {
+    const report = await Report.destroy({
+      where: {
+        artworkId: artworkId,
+      },
+    });
+    return report;
+  }
   public async delete(id: string): Promise<ReportProps> {
     const report = await this.retrive(id);
     await report.destroy();

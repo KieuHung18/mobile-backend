@@ -6,7 +6,7 @@ const userService = new UserService();
 
 User.post("/", async (req, res, next) => {
   try {
-    await userService.create(req.body);
+    await userService.create(req.body, true);
     res.json({ response: "User added" });
   } catch (error) {
     next(error);

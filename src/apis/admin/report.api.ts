@@ -33,13 +33,15 @@ Report.delete("/:id", async (req, res, next) => {
   const notificationService = new NotificationService();
 
   try {
-    const report = await reportService.delete(req.params.id);
+    const report = await reportService.retrive(req.params.id);
+    await reportService.delete(req.params.id);
     if (report) {
       if (req.body.id) {
         const artwork = await artworkService.delete(req.body.id);
         await cloudinaryService.delete(req.body.publicId);
         const user = await userService.getUserById(req.body.userId);
         await notificationService.sendReportNotification(user, report, artwork);
+        await reportService.deleteAllByArtworkId(req.body.id);
       }
     }
     res.json({ response: report });
