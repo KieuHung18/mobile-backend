@@ -39,7 +39,7 @@ Authentication.post("/", async (req, res, next) => {
     const userService = new UserService();
     const user = await userService.getUserById((await getSession(req)).user.id);
     session.user = user;
-    res.json({ response: { sessionId: session.id, user: user } });
+    res.json({ response: session.id });
   } catch (error) {
     next(error);
   }

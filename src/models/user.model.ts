@@ -4,6 +4,8 @@ import { Artwork } from "./artwork.model";
 import { Ideal } from "./ideal.model";
 import { Report } from "./report.model";
 import { Notification } from "./notification";
+import { Following } from "./following.model";
+import { Like } from "./like.model";
 
 export interface UserProps extends Model {
   id: string;
@@ -27,6 +29,17 @@ export interface UserProps extends Model {
   createIdeal;
 
   createReport;
+
+  createNotification;
+  getNotifications;
+
+  createLike;
+  removeLike;
+  hasLike;
+
+  createFollowing;
+  countFollowings;
+  getFollowings;
 }
 
 export const User = sequelize.define(
@@ -110,6 +123,23 @@ User.hasMany(Notification, {
   foreignKey: "userId",
 });
 Notification.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+User.hasMany(Like, {
+  as: "likes",
+  foreignKey: "userId",
+});
+Like.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+
+User.hasMany(Following, {
+  as: "followings",
+  foreignKey: "userId",
+});
+Following.belongsTo(User, {
   as: "user",
   foreignKey: "userId",
 });

@@ -1,5 +1,5 @@
-import { log } from "console";
 import NotFoundError from "../errors/not-found.error";
+import { ArtworkProps } from "../models/artwork.model";
 import { Ideal, IdealProps } from "../models/ideal.model";
 
 class IdealService {
@@ -45,7 +45,9 @@ class IdealService {
   }
   public async addThumbnail(ideals: IdealProps[]): Promise<IdealProps[]> {
     for (const ideal of ideals) {
-      const artworks = await ideal.getArtworks();
+      const artworks = (await ideal.getArtworks({
+        order: [["createdAt", "DESC"]],
+      })) as ArtworkProps[];
       if (artworks[0]) {
         ideal.dataValues.thumbnail = artworks[0].dataValues.url;
       } else {

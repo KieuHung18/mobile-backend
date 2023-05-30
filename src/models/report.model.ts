@@ -6,7 +6,6 @@ export interface ReportProps extends Model {
   id: string;
   name: string;
   description?: string;
-  solved: boolean;
   userId: string;
   artworkId: string;
 

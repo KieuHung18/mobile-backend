@@ -1,15 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
 
-export interface NotificationProps extends Model {
+export interface LikeProps extends Model {
   id: string;
-  title: string;
-  content: string;
   userId: string;
+  artworkId: string;
 }
 
-export const Notification = sequelize.define(
-  "Notification",
+export const Like = sequelize.define(
+  "Like",
   {
     id: {
       type: DataTypes.UUID,
@@ -17,25 +16,12 @@ export const Notification = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    content: {
-      type: DataTypes.STRING,
-    },
     createdAt: {
       type: DataTypes.DATE,
     },
     updatedAt: {
       type: DataTypes.DATE,
     },
-    deletedAt: {
-      type: DataTypes.DATE,
-    },
   },
-  {
-    paranoid: true,
-    freezeTableName: true,
-  }
+  { freezeTableName: true }
 );

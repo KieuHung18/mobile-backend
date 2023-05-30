@@ -5,6 +5,9 @@ import { User, UserProps } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { BYCRYPT_SALT_ROUNDS } from "./constant";
 import BadRequestError from "../errors/bad-request.error";
+import CloudinaryService from "./cloudinary.service";
+import { FollowingProps } from "../models/following.model";
+import { LikeProps } from "../models/like.model";
 
 class UserService {
   private async hashPassword(password: string): Promise<string> {
@@ -50,29 +53,75 @@ class UserService {
     }
   }
 
-  public async getUserByEmail(email: string): Promise<UserProps> {
-    const user = (await User.findOne({
-      where: {
-        email: email,
-      },
+  public async getUser(id: string): Promise<UserProps> {
+    const user = await User.findByPk(id, {
       attributes: {
-        exclude: ["hashPassword", "createdAt", "updatedAt"],
+        exclude: ["hashPassword", "createdAt", "updatedAt", "deleteAt"],
       },
-    })) as UserProps;
+    });
     if (user) {
-      return user;
+      return user as UserProps;
     } else {
       throw new NotFoundError("UserQueryError", "User not found");
     }
   }
+  public async getFollowingOfUser(
+    follows: FollowingProps[]
+  ): Promise<UserProps[]> {
+    const userIds = [];
+    for (const follow of follows) {
+      userIds.push(follow.followingId);
+    }
 
-  public async update(id: string, data: UserProps) {
+    const user = await User.findAll({
+      where: { id: userIds },
+      attributes: {
+        exclude: ["hashPassword", "createdAt", "updatedAt", "deleteAt"],
+      },
+    });
+    return user as UserProps[];
+  }
+  public async getUserLikeArtwork(likes: LikeProps[]): Promise<UserProps[]> {
+    const userIds = [];
+    for (const like of likes) {
+      userIds.push(like.userId);
+    }
+    const user = await User.findAll({
+      where: { id: userIds },
+      attributes: {
+        exclude: ["hashPassword", "createdAt", "updatedAt", "deleteAt"],
+      },
+    });
+    return user as UserProps[];
+  }
+  public async getFollowerOfUser(
+    follows: FollowingProps[]
+  ): Promise<UserProps[]> {
+    const userIds = [];
+    for (const follow of follows) {
+      userIds.push(follow.userId);
+    }
+
+    const user = await User.findAll({
+      where: { id: userIds },
+      attributes: {
+        exclude: ["hashPassword", "createdAt", "updatedAt", "deleteAt"],
+      },
+    });
+    return user as UserProps[];
+  }
+  public async update(id: string, data: UserProps): Promise<UserProps> {
     if (data.hashPassword) {
       data.hashPassword = await this.hashPassword(data.hashPassword);
     }
     const user = await this.getUserById(id);
+    if (user.publicId && data.profileUrl) {
+      const cloudinaryService = new CloudinaryService();
+      cloudinaryService.delete(user.publicId);
+    }
     Object.assign(user, data);
-    user.save();
+    await user.save();
+    return user;
   }
 }
 export default UserService;

@@ -11,7 +11,7 @@ import Gallery from "./gallery/gallery.api";
 const Apis = express.Router();
 
 Apis.use(session);
-Apis.use("/", Gallery);
+Apis.use("/gallery", Gallery);
 Apis.use("/auth", Authentication);
 Apis.use(authUser);
 Apis.use("/users", Client);

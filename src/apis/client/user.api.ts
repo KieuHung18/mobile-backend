@@ -15,9 +15,4 @@ User.post("/", async (req, res, next) => {
   }
 });
 
-User.delete("/", async (req, res) => {
-  // req.params.id
-  res.json({ response: "Work in progess... nothing yet" });
-});
-
 export default User;

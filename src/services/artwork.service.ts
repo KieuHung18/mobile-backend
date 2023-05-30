@@ -8,15 +8,15 @@ class ArtworkService {
     return (await Artwork.create(artwork)) as ArtworkProps;
   }
 
-  public async retrive(id: string): Promise<ArtworkProps> {
+  public async retrive(id: string, option?): Promise<ArtworkProps> {
     const artwork = await Artwork.findByPk(id);
-
     if (artwork) {
       return artwork as ArtworkProps;
     } else {
       throw new NotFoundError("ArtworkQueryError", "Artwork not found");
     }
   }
+
   public async update(id: string, data): Promise<ArtworkProps> {
     const artwork = await this.retrive(id);
     Object.assign(artwork, data);

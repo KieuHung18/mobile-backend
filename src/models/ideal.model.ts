@@ -7,6 +7,7 @@ export interface IdealProps extends Model {
   name: string;
   description?: string;
   publish: boolean;
+  userId: string;
 
   getArtworks;
   addArtwork;

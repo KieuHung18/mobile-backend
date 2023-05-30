@@ -18,10 +18,6 @@ module.exports = {
         type: DataTypes.STRING,
         field: "description",
       },
-      solved: {
-        type: DataTypes.BOOLEAN,
-        field: "solved",
-      },
       createdAt: {
         type: DataTypes.DATE,
         field: "createdAt",

@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
+import { Like } from "./like.model";
 
 export interface ArtworkProps extends Model {
   id: string;
@@ -8,6 +9,11 @@ export interface ArtworkProps extends Model {
   name?: string;
   description?: string;
   publish: boolean;
+  userId: string;
+
+  getLikes;
+  hasLike;
+  countLikes;
 }
 
 export const Artwork = sequelize.define(
@@ -48,3 +54,11 @@ export const Artwork = sequelize.define(
   },
   { paranoid: true, freezeTableName: true }
 );
+Artwork.hasMany(Like, {
+  as: "likes",
+  foreignKey: "artworkId",
+});
+Like.belongsTo(Artwork, {
+  as: "artwork",
+  foreignKey: "artworkId",
+});

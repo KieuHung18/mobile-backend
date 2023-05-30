@@ -1,5 +1,45 @@
 module.exports = {
   up: async (queryInterface) => {
+    await queryInterface.addConstraint("Like", {
+      fields: ["userId"],
+      type: "foreign key",
+      name: "Like_userId_fkey",
+      references: {
+        table: "User",
+        field: "id",
+      },
+    });
+
+    await queryInterface.addConstraint("Like", {
+      fields: ["artworkId"],
+      type: "foreign key",
+      name: "Like_artworkId_fkey",
+      references: {
+        table: "Artwork",
+        field: "id",
+      },
+    });
+
+    await queryInterface.addConstraint("Following", {
+      fields: ["userId"],
+      type: "foreign key",
+      name: "Following_userId_fkey",
+      references: {
+        table: "User",
+        field: "id",
+      },
+    });
+
+    await queryInterface.addConstraint("Notification", {
+      fields: ["userId"],
+      type: "foreign key",
+      name: "Notification_userId_fkey",
+      references: {
+        table: "User",
+        field: "id",
+      },
+    });
+
     await queryInterface.addConstraint("Report", {
       fields: ["userId"],
       type: "foreign key",

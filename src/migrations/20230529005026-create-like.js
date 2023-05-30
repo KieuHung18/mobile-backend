@@ -2,21 +2,13 @@ const DataTypes = require("sequelize").DataTypes;
 
 module.exports = {
   up: async (queryInterface) => {
-    await queryInterface.createTable("Notification", {
+    await queryInterface.createTable("Like", {
       id: {
         type: DataTypes.UUID,
         field: "id",
-        primaryKey: true,
         default: DataTypes.UUIDV4,
+        primaryKey: true,
         allowNull: false,
-      },
-      title: {
-        type: DataTypes.STRING,
-        field: "title",
-      },
-      content: {
-        type: DataTypes.STRING,
-        field: "content",
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -26,17 +18,17 @@ module.exports = {
         type: DataTypes.DATE,
         field: "updatedAt",
       },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: "deletedAt",
-      },
       userId: {
         type: DataTypes.UUID,
         field: "userId",
       },
+      artworkId: {
+        type: DataTypes.UUID,
+        field: "artworkId",
+      },
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable("Notification");
+    await queryInterface.dropTable("Like");
   },
 };
