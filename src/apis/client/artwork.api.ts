@@ -66,15 +66,11 @@ Artwork.get("/:id", artWorkPermission, async (req, res, next) => {
 
 Artwork.delete("/:id", artWorkPermission, async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
-    const user = await userService.getUserById(session.user.id);
-    const artwork = await artworkService.retrive(req.params.id);
-    if (user.hasArtwork(artwork)) {
-      const artwork = await artworkService.delete(req.params.id);
-      if (artwork) {
-        const cloudinaryService = new CloudinaryService();
-        cloudinaryService.delete(artwork.publicId);
-      }
+    const artwork = await artworkService.delete(req.params.id);
+    if (artwork) {
+      reportService.deleteAllByArtworkId(req.params.id);
+      const cloudinaryService = new CloudinaryService();
+      cloudinaryService.delete(artwork.publicId);
       res.json({ response: artwork });
     } else {
       throw new ForbiddenError("Fobidden", "Invalid User, action not allow");
@@ -112,7 +108,6 @@ Artwork.delete("/ideals/:id", idealPermission, async (req, res, next) => {
   try {
     const ideal = await idealService.retrive(req.params.id);
     const artwork = await new ArtworkService().retrive(req.body.id);
-    reportService.deleteAllByArtworkId(req.body.id);
     ideal.removeArtwork(artwork);
     res.json({ response: artwork });
   } catch (error) {
