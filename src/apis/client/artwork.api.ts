@@ -7,7 +7,9 @@ import CloudinaryService from "../../services/cloudinary.service";
 import idealPermission from "../../middlewares/ideal-permission.middleware";
 import ConflictError from "../../errors/conflict.error";
 import IdealService from "../../services/ideal.service";
+import ReportService from "../../services/report.service";
 
+const reportService = new ReportService();
 const Artwork = express.Router();
 const artworkService = new ArtworkService();
 const userService = new UserService();
@@ -110,6 +112,7 @@ Artwork.delete("/ideals/:id", idealPermission, async (req, res, next) => {
   try {
     const ideal = await idealService.retrive(req.params.id);
     const artwork = await new ArtworkService().retrive(req.body.id);
+    reportService.deleteAllByArtworkId(req.body.id);
     ideal.removeArtwork(artwork);
     res.json({ response: artwork });
   } catch (error) {
